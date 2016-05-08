@@ -1,0 +1,70 @@
+{% extends 'music/base.html'  %}
+
+
+<!-- Title Block -->
+
+
+{% block title %}
+    Album
+{% endblock %}
+
+
+<!-- content block-->
+{% block content %}
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6 col-lg-4">
+             <h1 style="text-align:center">Detail for the Albums: <br><br></h1>
+            <div class="thumbnail">
+                 <img src="{{album.album_logo.url}}" class="img-responsive"style="height:400px;width:700px;">
+
+            </div>
+                 <h3 style="text-align:center">Title: {{album.album_title}}</h3><br>
+                <h3 style="text-align:center">Artist: {{album.artist}}</h3><br>
+        </div>
+
+
+
+        <div class="col-sm-6 col-lg-8" style="margin-top:6.5%">
+
+             <a  href="{% url 'music:add_songs' album.id %}" style="font-size:16px;margin-top:11%;"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span>&nbsp;Add Songs</a>
+  <div class="panel panel-default" style="margin-top:2%;">
+                <div class="panel-body" style="">
+
+                    <h3 style="text-style:bold;text-align:center">All Songs</h3>
+
+
+            <table class="table" >
+  <thead class="thead-inverse">
+    <tr style="font-size:20px;">
+      <th>#</th>
+      <th>Song Title</th>
+      <th>File Type</th>
+      <th>Release Date</th>
+        <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+{% for song in album.songs.all %}
+    <tr >
+      <th scope="row">{{ forloop.counter }}</th>
+      <td><a href="{% url 'music:play' album.id song.id %}" target="_blank"> {{ song.song_title }}</a></td>
+         <td>{{ song.file_type }}</td>
+         <td>{{ song.release_date }}</td>
+        <td>  <form action="{% url 'music:delete_song' album.id song.id %}" method="post" style="display: inline;">
+                                        {% csrf_token %}
+                                        <input type="hidden" name="song_id" value="{{ song.id }}" />
+                                        <button type="submit" class="btn btn-primary btn-xs">
+                                            <span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
+                                        </button></form> </td>
+    </tr>
+{% endfor %}
+  </tbody>
+</table>
+
+</div>
+      </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

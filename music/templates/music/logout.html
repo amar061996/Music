@@ -1,0 +1,11 @@
+{% include 'music/base.html' %}
+
+<div class="container-fluid">
+    <div class="col-sm-12 col-lg-4 col-lg-offset-4" style="margin-top:15%">
+        {% if error %}
+       <h3 style="text-style:bold;font-size:30px;">{{ error }}</h3>
+        {% else %}
+        <h3 style="text-style:bold;font-size:30px;">You have been Logged Out</h3>
+        {% endif %}
+    </div>
+</div>
