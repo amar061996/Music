@@ -31,7 +31,11 @@ class IndexView(generic.ListView):
     def get_queryset(self):
         return Album.objects.all()
 
-
+class MyAlbumList(generic.ListView):
+    template_name = 'music/index.html'
+    context_object_name = 'all_album'
+    def get_queryset(self):
+        return Album.objects.filter(owner=self.request.user)
 
 class DetailView(generic.DetailView):
     model = Album
