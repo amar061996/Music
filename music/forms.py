@@ -40,3 +40,5 @@ class SongsForm(forms.ModelForm):
     class Meta:
         model=Songs
         fields=['song_title','file_type','release_date','music_file']
+
+

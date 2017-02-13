@@ -2,6 +2,7 @@ from django.conf.urls import url
 from . import views
 from rest_framework.urlpatterns import format_suffix_patterns
 
+from django.contrib.auth.decorators import login_required
 
 app_name='music'
 
@@ -31,11 +32,12 @@ urlpatterns = [
     url(r'^(?P<album_id>[0-9]+)/delete_song/(?P<song_id>[0-9]+)$', views.songDelete,name='delete_song'), #delete song
     url(r'^(?P<album_id>[0-9]+)/play_song/(?P<song_id>[0-9]+)$', views.playSong,name='play'),
     #music/album/add
-    url(r'^album/add$', views.AlbumCreate.as_view(),name='album_add'),  #create
+    url(r'^album/add$',login_required(views.AlbumCreate.as_view()),name='album_add'),  #create
     #music/album/2/update
-    url(r'^album/(?P<pk>[0-9]+)/update$', views.AlbumUpdate.as_view(),name='album_update'), #update
+    url(r'^album/(?P<pk>[0-9]+)/update$', login_required(views.AlbumUpdate.as_view())   ,name='album_update'), #update
     #music/album/2/delete
-    url(r'^album/(?P<pk>[0-9]+)/delete$', views.AlbumDelete.as_view(),name='album_delete'), #delete
+    url(r'^album/(?P<pk>[0-9]+)/delete$', login_required(views.AlbumDelete.as_view()),name='album_delete'), #delete
+    
 
 ]
 

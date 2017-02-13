@@ -18,7 +18,9 @@ from django.shortcuts import render,redirect
 #for creating,updating and deleting objects form
 from django.views.generic.edit import CreateView,UpdateView,DeleteView
 
-
+from django.http import JsonResponse,Http404
+#login required decorator
+from django.contrib.auth.decorators import login_required
 #class based view(Generic View)
 
 
@@ -38,20 +40,36 @@ class DetailView(generic.DetailView):
 #creating a form to add albums
 
 class AlbumCreate(CreateView):
-
     model = Album
 
     fields = ['artist','album_title','genre','album_logo']
+
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super(AlbumCreate, self).form_valid(form)
 
 class AlbumUpdate(UpdateView):
 
     model = Album
     fields = ['artist','album_title','genre','album_logo']
 
+    def dispatch(self,request,*args,**kwargs):
+        obj=self.get_object()
+        if obj.owner!=self.request.user:
+            return redirect(obj)
+        return super(AlbumUpdate,self).dispatch(request,*args,**kwargs)    
+
 class AlbumDelete(DeleteView):
 
     model = Album
     success_url = reverse_lazy('music:index')
+
+    #override get_object method to validate user
+    def get_object(self,queryset=None):
+        obj=super(AlbumDelete,self).get_object()
+        if obj.owner!=self.request.user:
+            raise Http404
+        return obj    
 
 #User_Registration Class
 
@@ -112,6 +130,7 @@ class LoginFormView(View):
         return render(request,self.template_name,{'form':form})
 
     def post(self,request):
+                n=request.GET.get('next')
                 form=self.form_class(request.POST)
                 username = request.POST['username']
                 password = request.POST['password']
@@ -122,6 +141,8 @@ class LoginFormView(View):
                  if user.is_active:
 
                     login(request,user)
+                    if n:
+                        return redirect(n)
                     return redirect('music:index')
 
 
@@ -173,9 +194,6 @@ def logoutUser(request):
         return render(request,'music/logout.html')
     else:
         return render(request,'music/logout.html',{'error':"User is not Logged In.Login to Logout"})
-
-
-
 
 
 
