@@ -20,6 +20,8 @@ urlpatterns = [
     url(r'^$', views.IndexView.as_view(),name='index'),
     #my_album_list
     url(r'^myalbum$',login_required(views.MyAlbumList.as_view()),name='my_album'),
+    #my_songs_list
+    url(r'^mysongs$',login_required(views.MySongsList.as_view()),name='my_songs'),
     #register
      url(r'^register/$', views.UserFormView.as_view(),name='register'),
     #login

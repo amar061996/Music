@@ -1,0 +1,55 @@
+{% extends 'music/base.html' %}
+
+{% block content %}
+
+
+<div class="col-sm-8 col-lg-10 col-lg-offset-1" >
+
+
+	<div class="panel panel-default" style="margin-top:2%;">
+		<div class="panel-body" style="">
+
+			<h3 style="text-style:bold;text-align:center">My Songs</h3>
+
+
+			<table class="table" >
+				<thead class="thead-inverse">
+					<tr style="font-size:20px;">
+						<th>#</th>
+						<th>Song Title</th>
+						<th>File Type</th>
+						<th>Release Date</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for song in all_songs %}
+					<tr >
+						<th scope="row">{{ forloop.counter }}</th>
+						<td><a href="{% url 'music:play' song.album.id song.id %}" target="_blank"> {{ song.song_title }}</a></td>
+						<td>{{ song.file_type }}</td>
+						<td>{{ song.release_date }}</td>
+						<td>  <form action="{% url 'music:delete_song' song.album.id song.id %}" method="post" style="display: inline;">
+							{% csrf_token %}
+							<input type="hidden" name="song_id" value="{{ song.id }}" />
+							<button type="submit" class="btn btn-primary btn-xs" id='delete'>
+								<span class="glyphicon glyphicon-trash"></span>&nbsp;Delete
+							</button></form> </td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+		</div>
+	</div>
+<script type="text/javascript">
+	
+$(document).on('click','#delete',function(){
+
+	return confirm("Are you sure?");
+})
+
+
+</script>
+{% endblock %}

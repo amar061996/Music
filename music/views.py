@@ -37,6 +37,15 @@ class MyAlbumList(generic.ListView):
     def get_queryset(self):
         return Album.objects.filter(owner=self.request.user)
 
+class MySongsList(generic.ListView):
+    template_name='music/mysongs.html'
+    context_object_name='all_songs'
+
+    def get_queryset(self):
+        album_qs=Album.objects.filter(owner=self.request.user)
+        return Songs.objects.filter(album__in=album_qs) 
+
+
 class DetailView(generic.DetailView):
     model = Album
     template_name = 'music/detail.html'
@@ -181,8 +190,11 @@ class SongsView(View):
 #delete song
 def songDelete(request,album_id,song_id):
 
-    Songs.objects.filter(pk=song_id).delete()
-    return redirect('music:detail',album_id)
+    song=Songs.objects.filter(pk=song_id).first()
+    if song.album.owner==request.user:
+        song.delete()
+        return redirect('music:detail',album_id)
+    raise Http404    
 
 #play song
 def playSong(request,album_id,song_id):
