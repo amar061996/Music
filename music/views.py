@@ -21,6 +21,8 @@ from django.views.generic.edit import CreateView,UpdateView,DeleteView
 from django.http import JsonResponse,Http404
 #login required decorator
 from django.contrib.auth.decorators import login_required
+#Q lookups
+from django.db.models import Q
 #class based view(Generic View)
 
 
@@ -29,7 +31,17 @@ class IndexView(generic.ListView):
     template_name = 'music/index.html'
     context_object_name = 'all_album'
     def get_queryset(self):
-        return Album.objects.all()
+        queryset=Album.objects.all()
+        query=self.request.GET.get("q")
+        if query:
+            queryset=queryset.filter(
+                Q(album_title__icontains=query) |
+                Q(artist__icontains=query) |
+                Q(genre__icontains=query) |
+                Q(owner__first_name__icontains=query) |
+                Q(owner__last_name__icontains=query)
+                ).distinct()
+        return queryset
 
 class MyAlbumList(generic.ListView):
     template_name = 'music/index.html'
