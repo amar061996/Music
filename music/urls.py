@@ -8,12 +8,6 @@ app_name='music'
 
 
 urlpatterns = [
-    #api
-     url(r'^api/users$', views.UserList.as_view()),
-    url(r'^api/users/(?P<pk>[0-9]+)/$', views.UserDetail.as_view()),
-    url(r'^api/$', views.AlbumList.as_view()),
-    url(r'^api/(?P<pk>[0-9]+)/$',views.AlbumDetail.as_view()),
-    url(r'^api/(?P<pk>[0-9]+)/$',views.AlbumDetail.as_view()),
 
     #tutorial
 

@@ -1,16 +1,4 @@
-
- {% include 'music/base.html'  %}
-<!-- content block-->
-{% block content %}
-
-
-
-
-
-
-
-
-   {% if all_album %}
+{% if all_album %}
        <!--  {% if user.is_authenticated %}
 
                     <h3 style="margin-left:40%">Welcome {{request.user.username}}</h3><br><br>
@@ -59,15 +47,3 @@
                 </a>
             </div>
         {% endif %}
-<!--    confirm delete    -->  
-<script type="text/javascript">
-    
-$(document).on('click','#a_delete',function(){
-
-    return confirm("Are you sure?")
-
-})
-
-
-</script>
-{% endblock %}
